@@ -27,7 +27,7 @@
 		9FD49D461EC709AC004C61C8 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D3A1EC709AC004C61C8 /* README.md */; };
 		9FD49D4A1EC84A76004C61C8 /* SKHomeButtonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D491EC84A76004C61C8 /* SKHomeButtonModel.m */; };
 		9FD49D4E1EC84DC6004C61C8 /* SKNextViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D4D1EC84DC6004C61C8 /* SKNextViewModel.m */; };
-		9FD49D541EC85C8E004C61C8 /* SKBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D511EC85C8E004C61C8 /* SKBaseView.m */; };
+		9FD49D541EC85C8E004C61C8 /* SKBaseOptionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D511EC85C8E004C61C8 /* SKBaseOptionsView.m */; };
 		9FD49D551EC85C8E004C61C8 /* SKHomeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D531EC85C8E004C61C8 /* SKHomeButton.m */; };
 /* End PBXBuildFile section */
 
@@ -74,8 +74,8 @@
 		9FD49D491EC84A76004C61C8 /* SKHomeButtonModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKHomeButtonModel.m; sourceTree = "<group>"; };
 		9FD49D4C1EC84DC6004C61C8 /* SKNextViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKNextViewModel.h; sourceTree = "<group>"; };
 		9FD49D4D1EC84DC6004C61C8 /* SKNextViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKNextViewModel.m; sourceTree = "<group>"; };
-		9FD49D501EC85C8E004C61C8 /* SKBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBaseView.h; sourceTree = "<group>"; };
-		9FD49D511EC85C8E004C61C8 /* SKBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBaseView.m; sourceTree = "<group>"; };
+		9FD49D501EC85C8E004C61C8 /* SKBaseOptionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBaseOptionsView.h; sourceTree = "<group>"; };
+		9FD49D511EC85C8E004C61C8 /* SKBaseOptionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBaseOptionsView.m; sourceTree = "<group>"; };
 		9FD49D521EC85C8E004C61C8 /* SKHomeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKHomeButton.h; sourceTree = "<group>"; };
 		9FD49D531EC85C8E004C61C8 /* SKHomeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKHomeButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -231,8 +231,8 @@
 		9FD49D4F1EC85C8E004C61C8 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				9FD49D501EC85C8E004C61C8 /* SKBaseView.h */,
-				9FD49D511EC85C8E004C61C8 /* SKBaseView.m */,
+				9FD49D501EC85C8E004C61C8 /* SKBaseOptionsView.h */,
+				9FD49D511EC85C8E004C61C8 /* SKBaseOptionsView.m */,
 				9FD49D521EC85C8E004C61C8 /* SKHomeButton.h */,
 				9FD49D531EC85C8E004C61C8 /* SKHomeButton.m */,
 			);
@@ -325,7 +325,7 @@
 				9FD49D3C1EC709AC004C61C8 /* MASCompositeConstraint.m in Sources */,
 				9FD49D401EC709AC004C61C8 /* MASViewAttribute.m in Sources */,
 				9FD49D3E1EC709AC004C61C8 /* MASConstraintMaker.m in Sources */,
-				9FD49D541EC85C8E004C61C8 /* SKBaseView.m in Sources */,
+				9FD49D541EC85C8E004C61C8 /* SKBaseOptionsView.m in Sources */,
 				9FD49D421EC709AC004C61C8 /* NSArray+MASAdditions.m in Sources */,
 				9FD49D451EC709AC004C61C8 /* ViewController+MASAdditions.m in Sources */,
 				9FD49D3D1EC709AC004C61C8 /* MASConstraint.m in Sources */,
@@ -488,6 +488,7 @@
 				9FD49D121EC6FE8F004C61C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

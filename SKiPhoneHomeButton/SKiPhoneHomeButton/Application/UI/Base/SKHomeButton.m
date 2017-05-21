@@ -8,13 +8,14 @@
 
 #import "Tool.h"
 #import "SKHomeButton.h"
+#import "SKBaseOptionsView.h"
 
 @interface SKHomeButton ()
 
 @property (nonatomic, strong, readwrite) UIView *baseView;
+@property (nonatomic, strong, readwrite) SKBaseOptionsView *secondOptionsView;
 
 @end
-static const NSInteger minUpDownLimits = 60 * 1.5f;
 
 @implementation SKHomeButton
 
@@ -24,6 +25,8 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
         self.alpha = 0.3;
         [self setUI];
         [self setGesture];
+        NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self selector:@selector(notice:) name:@"hiddenSecondView" object:nil];
     }
     return self;
 }
@@ -47,6 +50,7 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
     thirdRound.layer.cornerRadius = 19.5;
     thirdRound.layer.borderColor = [UIColor colorWithWhite:0.3 alpha:1].CGColor;
     thirdRound.layer.borderWidth = 0.5;
+    thirdRound.userInteractionEnabled = NO;
     [thirdRound mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.baseView);
         make.size.mas_offset(CGSizeMake(39, 39));
@@ -59,6 +63,7 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
     secondRound.layer.cornerRadius = 16;
     secondRound.layer.borderColor = [UIColor colorWithWhite:0.3 alpha:1].CGColor;
     secondRound.layer.borderWidth = 0.5;
+    secondRound.userInteractionEnabled = NO;
     [secondRound mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.baseView);
         make.size.mas_offset(CGSizeMake(32, 32));
@@ -71,6 +76,7 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
     firstRound.layer.cornerRadius = 12.5;
     firstRound.layer.borderColor = [UIColor colorWithWhite:0.3 alpha:1].CGColor;
     firstRound.layer.borderWidth = 0.5;
+    firstRound.userInteractionEnabled = NO;
     [firstRound mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.baseView);
         make.size.mas_offset(CGSizeMake(25, 25));
@@ -81,8 +87,18 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
 #pragma mark - 手势
 
 - (void)setGesture {
-    UIPanGestureRecognizer *gesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(drag:)];
-    [self addGestureRecognizer:gesture];
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(drag:)];
+    [self addGestureRecognizer:panGesture];
+    
+    UITapGestureRecognizer *showGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSecondOptionsView)];
+    [self addGestureRecognizer:showGesture];
+    
+    UITapGestureRecognizer *hiddenGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenSecondOptionsView)];
+    self.secondOptionsView.userInteractionEnabled = YES;
+    [self.secondOptionsView addGestureRecognizer:hiddenGesture];
+    
+    UITapGestureRecognizer *clickScreenGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenSecondOptionsView)];
+    [[self superview] addGestureRecognizer:clickScreenGesture];
 }
 
 - (void)drag:(UIPanGestureRecognizer *)sender {
@@ -96,14 +112,11 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
     }
     if (sender.state == UIGestureRecognizerStateEnded) {
         [self autoCloseEdge];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            // 5s 后透明
-            [UIView animateWithDuration:0.5 animations:^{
-                self.alpha = 0.3;
-            }];
-        });
     }
 }
+
+
+#pragma mark - 自动靠边
 
 - (void)autoCloseEdge {
     [UIView animateWithDuration:0.5f animations:^{
@@ -116,10 +129,16 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
 }
 
 - (void)autoEdgeOffset {
-    CGPoint config = CGPointMake(self.bounds.size.width * 0.3, self.bounds.size.height * 0.3);
+    CGPoint config = CGPointMake(self.bounds.origin.x, self.bounds.origin.y);
     
     [UIView animateWithDuration:0.5f animations:^{
         self.center = [self calculatePoisitionWithEndOffset:config];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // 5s 后透明
+            [UIView animateWithDuration:0.5 animations:^{
+                self.alpha = 0.3;
+            }];
+        });
     }];
 }
 
@@ -128,18 +147,42 @@ static const NSInteger minUpDownLimits = 60 * 1.5f;
     CGFloat ballHalfH = self.bounds.size.height * 0.5;
     CGPoint center = self.center;
     
-    if (center.y < minUpDownLimits) {
-        center.y = ballHalfH - offset.y;
+    if (center.y > 100 && center.y < (HEIGHT - 100)) {// 左右靠边范围
+        if (center.x < WIDTH / 2) {
+            center.x = ballHalfW;
+        } else {
+            center.x = WIDTH - ballHalfW;
+        }
+    } else {// 上下靠边范围
+        if (center.y < 100) {
+            center.y = ballHalfH;
+        } else {
+            center.y = HEIGHT - ballHalfH;
+        }
     }
-    else if (center.y > self.bounds.size.height - minUpDownLimits) {
-        center.y = self.bounds.size.height + offset.y - ballHalfH;
-    }
-    else {
-        center.x = (center.x < self.bounds.size.width  * 0.5) ? (ballHalfW - offset.x) : (self.bounds.size.width + offset.x - ballHalfW);
-    }
+    
     return center;
 }
 
+#pragma mark - 显示/隐藏二级选项界面
 
+- (void)showSecondOptionsView {
+    self.hidden = YES;
+    self.secondOptionsView = [[SKBaseOptionsView alloc] initWithFrame:[self superview].frame displayType:SK_BASEVIEW_TYPE_NORMAL homeBtnPoint:self.bounds.origin];
+    [[self superview] addSubview:self.secondOptionsView];
+    self.secondOptionsView.userInteractionEnabled = YES;
+}
 
+- (void)hiddenSecondOptionsView {
+    self.hidden = NO;
+    [self.secondOptionsView removeFromSuperview];
+}
+
+#pragma mark - 通知
+- (void)notice:(id)sender {
+    NSString *isHidden = [sender userInfo][@"isHidden"];
+    if ([isHidden isEqualToString:@"YES"]) {
+        self.hidden = NO;
+    }
+}
 @end

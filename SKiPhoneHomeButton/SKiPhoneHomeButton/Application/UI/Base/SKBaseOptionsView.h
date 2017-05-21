@@ -14,8 +14,8 @@ typedef NS_ENUM(NSInteger, SK_BASEVIEW_TYPE) {
     SK_BASEVIEW_TYPE_FOUR// 四控件格式
 };
 
-@interface SKBaseView : UIView
+@interface SKBaseOptionsView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame displayType:(SK_BASEVIEW_TYPE)displayType;
+- (instancetype)initWithFrame:(CGRect)frame displayType:(SK_BASEVIEW_TYPE)displayType homeBtnPoint:(CGPoint)homeBtnPoint;
 
 @end
