@@ -9,11 +9,14 @@
 #import "Tool.h"
 #import "SKHomeButton.h"
 #import "SKBaseOptionsView.h"
+#import "SKAnimationController.h"
 
 @interface SKHomeButton ()
 
 @property (nonatomic, strong, readwrite) UIView *baseView;
 @property (nonatomic, strong, readwrite) SKBaseOptionsView *secondOptionsView;
+@property (nonatomic, strong, readwrite) SKAnimationController *animationController;
+@property (nonatomic, assign, readwrite) CGPoint startPoint;
 
 @end
 
@@ -27,6 +30,7 @@
         [self setGesture];
         NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(notice:) name:@"hiddenSecondView" object:nil];
+        self.animationController = [[SKAnimationController alloc] init];
     }
     return self;
 }
@@ -92,13 +96,6 @@
     
     UITapGestureRecognizer *showGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSecondOptionsView)];
     [self addGestureRecognizer:showGesture];
-    
-    UITapGestureRecognizer *hiddenGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenSecondOptionsView)];
-    self.secondOptionsView.userInteractionEnabled = YES;
-    [self.secondOptionsView addGestureRecognizer:hiddenGesture];
-    
-    UITapGestureRecognizer *clickScreenGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenSecondOptionsView)];
-    [[self superview] addGestureRecognizer:clickScreenGesture];
 }
 
 - (void)drag:(UIPanGestureRecognizer *)sender {
@@ -137,7 +134,7 @@
             // 5s 后透明
             [UIView animateWithDuration:0.5 animations:^{
                 self.alpha = 0.3;
-            }];
+            }]; 
         });
     }];
 }
@@ -171,11 +168,27 @@
     self.secondOptionsView = [[SKBaseOptionsView alloc] initWithFrame:[self superview].frame displayType:SK_BASEVIEW_TYPE_NORMAL homeBtnPoint:self.bounds.origin];
     [[self superview] addSubview:self.secondOptionsView];
     self.secondOptionsView.userInteractionEnabled = YES;
-}
-
-- (void)hiddenSecondOptionsView {
-    self.hidden = NO;
-    [self.secondOptionsView removeFromSuperview];
+    
+    _startPoint = CGPointMake(0, 0);
+    if (self.center.y > 100 && self.center.y < (HEIGHT - 100)) {// 左右靠边
+        if (self.center.x < WIDTH / 2) {
+            _startPoint = CGPointMake(self.frame.size.width, self.frame.origin.y + self.frame.size.height);
+        } else {
+            _startPoint = CGPointMake(WIDTH - self.frame.size.width, self.frame.origin.y + self.frame.size.height);
+        }
+    } else {// 上下靠边
+        if (self.center.y < 100) {
+            _startPoint = CGPointMake(self.frame.origin.x + self.frame.size.width, self.frame.size.height);
+        } else {
+            _startPoint = CGPointMake(self.frame.origin.x + self.frame.size.width, HEIGHT - self.frame.size.height);
+        }
+    }
+    [self.animationController transformAnimationGroupWithView:self.secondOptionsView.baseView duration:0.3 startPoint:_startPoint animationType:SK_ANIMATION_TYPE_LARGEN isFinish:^(BOOL isFinish) {
+        
+    }];
+    
+    self.secondOptionsView.startPoint = _startPoint;
+    self.secondOptionsView.animationController = self.animationController;
 }
 
 #pragma mark - 通知
@@ -183,6 +196,13 @@
     NSString *isHidden = [sender userInfo][@"isHidden"];
     if ([isHidden isEqualToString:@"YES"]) {
         self.hidden = NO;
+        self.alpha = 1;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // 5s 后透明
+            [UIView animateWithDuration:0.5 animations:^{
+                self.alpha = 0.3;
+            }];
+        });
     }
 }
 @end

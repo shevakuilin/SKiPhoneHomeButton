@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SKAnimationController.h"
 
 typedef NS_ENUM(NSInteger, SK_BASEVIEW_TYPE) {
     SK_BASEVIEW_TYPE_NORMAL,// 默认格式
@@ -17,5 +18,11 @@ typedef NS_ENUM(NSInteger, SK_BASEVIEW_TYPE) {
 @interface SKBaseOptionsView : UIView
 
 - (instancetype)initWithFrame:(CGRect)frame displayType:(SK_BASEVIEW_TYPE)displayType homeBtnPoint:(CGPoint)homeBtnPoint;
+
+@property (nonatomic, assign, readwrite) CGPoint startPoint;
+
+@property (nonatomic, strong, readwrite) SKAnimationController *animationController;
+
+@property (nonatomic, strong, readwrite) UIView *baseView;
 
 @end

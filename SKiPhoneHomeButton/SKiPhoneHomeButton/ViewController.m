@@ -30,7 +30,7 @@
 }
 
 - (void)setHomeButtom {
-    self.homeButton = [[SKHomeButton alloc] initWithFrame:CGRectMake(100, 100, 50, 50)];
+    self.homeButton = [[SKHomeButton alloc] initWithFrame:CGRectMake(0, 100, 50, 50)];
     [self.view addSubview:self.homeButton];
 }
 

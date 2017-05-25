@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9FB6053B1ED324CC003ADB29 /* SKAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6053A1ED324CC003ADB29 /* SKAnimationController.m */; };
 		9FD49CFE1EC6FE8F004C61C8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49CFD1EC6FE8F004C61C8 /* main.m */; };
 		9FD49D011EC6FE8F004C61C8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D001EC6FE8F004C61C8 /* AppDelegate.m */; };
 		9FD49D041EC6FE8F004C61C8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FD49D031EC6FE8F004C61C8 /* ViewController.m */; };
@@ -32,6 +33,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9FB605391ED324CC003ADB29 /* SKAnimationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKAnimationController.h; sourceTree = "<group>"; };
+		9FB6053A1ED324CC003ADB29 /* SKAnimationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKAnimationController.m; sourceTree = "<group>"; };
 		9FD49CF91EC6FE8F004C61C8 /* SKiPhoneHomeButton.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SKiPhoneHomeButton.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FD49CFD1EC6FE8F004C61C8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9FD49CFF1EC6FE8F004C61C8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -224,6 +227,8 @@
 		9FD49D4B1EC84C3D004C61C8 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				9FB605391ED324CC003ADB29 /* SKAnimationController.h */,
+				9FB6053A1ED324CC003ADB29 /* SKAnimationController.m */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -323,6 +328,7 @@
 				9FD49D461EC709AC004C61C8 /* README.md in Sources */,
 				9FD49D441EC709AC004C61C8 /* View+MASAdditions.m in Sources */,
 				9FD49D3C1EC709AC004C61C8 /* MASCompositeConstraint.m in Sources */,
+				9FB6053B1ED324CC003ADB29 /* SKAnimationController.m in Sources */,
 				9FD49D401EC709AC004C61C8 /* MASViewAttribute.m in Sources */,
 				9FD49D3E1EC709AC004C61C8 /* MASConstraintMaker.m in Sources */,
 				9FD49D541EC85C8E004C61C8 /* SKBaseOptionsView.m in Sources */,
