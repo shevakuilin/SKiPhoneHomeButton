@@ -52,7 +52,7 @@
         animation.duration = _duration - 0.1;
     } else {
         startValue = [NSValue valueWithCGPoint:[UIApplication sharedApplication].keyWindow.center];
-        endValue = [NSValue valueWithCGPoint:CGPointMake(startPosition.x - 25, startPosition.y - 50)];
+        endValue = [NSValue valueWithCGPoint:startPosition];
         animation.duration = _duration;
     }
     animation.values = @[startValue, endValue];

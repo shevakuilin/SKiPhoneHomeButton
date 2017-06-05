@@ -12,6 +12,7 @@
 #import "Masonry.h"
 
 #define WIDTH        [UIScreen mainScreen].bounds.size.width
-#define HEIGHT        [UIScreen mainScreen].bounds.size.height
+#define HEIGHT       [UIScreen mainScreen].bounds.size.height
+#define SKWeakSelf     __weak typeof(self) weakSelf = self
 
 #endif /* Tool_h */

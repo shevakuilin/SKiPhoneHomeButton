@@ -62,7 +62,7 @@
     self.baseView.layer.cornerRadius = 10;
     [self.baseView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self);
-        make.size.mas_offset(CGSizeMake(250, 250));
+        make.size.mas_offset(CGSizeMake(280, 280));
     }];
     
     

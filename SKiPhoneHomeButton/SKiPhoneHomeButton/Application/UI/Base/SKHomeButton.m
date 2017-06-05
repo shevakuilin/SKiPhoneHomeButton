@@ -17,6 +17,8 @@
 @property (nonatomic, strong, readwrite) SKBaseOptionsView *secondOptionsView;
 @property (nonatomic, strong, readwrite) SKAnimationController *animationController;
 @property (nonatomic, assign, readwrite) CGPoint startPoint;
+@property (nonatomic, strong, readwrite) dispatch_source_t timer;
+@property (nonatomic, assign, readwrite) NSInteger quoteCount;
 
 @end
 
@@ -127,15 +129,9 @@
 
 - (void)autoEdgeOffset {
     CGPoint config = CGPointMake(self.bounds.origin.x, self.bounds.origin.y);
-    
     [UIView animateWithDuration:0.5f animations:^{
         self.center = [self calculatePoisitionWithEndOffset:config];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            // 5s 后透明
-            [UIView animateWithDuration:0.5 animations:^{
-                self.alpha = 0.3;
-            }]; 
-        });
+        [self fadeoutTimer];
     }];
 }
 
@@ -172,9 +168,9 @@
     _startPoint = CGPointMake(0, 0);
     if (self.center.y > 100 && self.center.y < (HEIGHT - 100)) {// 左右靠边
         if (self.center.x < WIDTH / 2) {
-            _startPoint = CGPointMake(self.frame.size.width, self.frame.origin.y + self.frame.size.height);
+            _startPoint = self.center.y < [self superview].center.y ? CGPointMake(self.frame.size.width, self.frame.origin.y + self.frame.size.height) : CGPointMake(self.frame.size.width, self.frame.origin.y);
         } else {
-            _startPoint = CGPointMake(WIDTH - self.frame.size.width, self.frame.origin.y + self.frame.size.height);
+            _startPoint = self.center.y < [self superview].center.y ? CGPointMake(WIDTH - self.frame.size.width, self.frame.origin.y + self.frame.size.height) : CGPointMake(WIDTH - self.frame.size.width, self.frame.origin.y );
         }
     } else {// 上下靠边
         if (self.center.y < 100) {
@@ -184,7 +180,6 @@
         }
     }
     [self.animationController transformAnimationGroupWithView:self.secondOptionsView.baseView duration:0.3 startPoint:_startPoint animationType:SK_ANIMATION_TYPE_LARGEN isFinish:^(BOOL isFinish) {
-        
     }];
     
     self.secondOptionsView.startPoint = _startPoint;
@@ -192,17 +187,40 @@
 }
 
 #pragma mark - 通知
+
 - (void)notice:(id)sender {
     NSString *isHidden = [sender userInfo][@"isHidden"];
     if ([isHidden isEqualToString:@"YES"]) {
         self.hidden = NO;
         self.alpha = 1;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            // 5s 后透明
-            [UIView animateWithDuration:0.5 animations:^{
-                self.alpha = 0.3;
-            }];
-        });
+        [self fadeoutTimer];
     }
 }
+
+#pragma mark - 计时器
+
+- (void)fadeoutTimer {
+    NSLog(@"开始渐隐");
+    if (_quoteCount > 0) {
+        NSLog(@"计时已存在，重新开始渐隐");
+        _quoteCount = 0;
+        dispatch_source_cancel(_timer);
+    }
+    _quoteCount += 1;
+    _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    NSLog(@"开始计时");
+    dispatch_source_set_timer(_timer, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0.1 * NSEC_PER_SEC);// 这里使用DISPATCH_TIME_FOREVER, 仅重复一次
+    SKWeakSelf;
+    dispatch_source_set_event_handler(_timer, ^{
+        [UIView animateWithDuration:0.5 animations:^{
+            weakSelf.alpha = 0.3;
+            weakSelf.quoteCount -= 1;
+            NSLog(@"渐隐效果完成!");
+            dispatch_source_cancel(weakSelf.timer);
+            NSLog(@"计时结束");
+        }];
+    });
+    dispatch_resume(_timer);
+}
+
 @end
